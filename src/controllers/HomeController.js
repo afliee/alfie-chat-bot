@@ -7,10 +7,11 @@ let getHomePage = (req, res) => {
 };
 
 let postWebhook = (req, res) => {
+    console.log(req.body);
     let body = req.body;
 
     // Checks this is an event from a page subscription
-    if (body.object === 'page') {
+    if (body && body.object === 'page') {
         // Iterates over each entry - there may be multiple if batched
         body.entry.forEach(function (entry) {
             // Gets the body of the webhook event

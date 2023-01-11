@@ -1,21 +1,21 @@
-import bodyParser from 'body-parser';
 import express from 'express';
+import bodyParser from 'body-parser';
 import viewEngine from './configs/viewEngine';
-import webRouter from './routes/web';
-import serverless from 'serverless-http';
+import webRoutes from './routes/web';
 
 let app = express();
 
-// config view engine
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+//config view Engine
 viewEngine(app);
 
-// config web router
-webRouter(app);
+//config web routes
+webRoutes(app);
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 let port = process.env.PORT || 8080;
+
 app.listen(port, () => {
-    console.log('app listening on port ' + port);
+    console.log('App is running at the port: ' + port);
 });
-app = serverless(app);
