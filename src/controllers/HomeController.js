@@ -158,15 +158,17 @@ function callSendAPI(sender_psid, response) {
     );
 }
 
-function setupProfile(req, res) {
+async function setupProfile(req, res) {
     // Construct the message body
     let request_body = {
-        get_started: 'GET_STARTED',
-        whitelisted_domains: 'https://alfie-chat-bot.onrender.com/',
+        get_started: {
+            payload: 'GET_STARTED',
+        },
+        whitelisted_domains: ['https://alfie-chat-bot.onrender.com/'],
     };
 
     // Send the HTTP request to the Messenger Platform
-    request(
+    await request(
         {
             uri: `https://graph.facebook.com/v15.0/me/messenger_profile?access_token=${PAGE_ACCESS_TOKEN}`,
             qs: { access_token: PAGE_ACCESS_TOKEN },
@@ -174,6 +176,7 @@ function setupProfile(req, res) {
             json: request_body,
         },
         (err, res, body) => {
+            console.log(body);
             if (!err) {
                 console.log('setup profile success!');
             } else {
@@ -181,6 +184,8 @@ function setupProfile(req, res) {
             }
         }
     );
+
+    return res.send('setup profile success!');
 }
 module.exports = {
     getHomePage: getHomePage,
