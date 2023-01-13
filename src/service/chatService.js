@@ -30,7 +30,7 @@ function callSendAPI(sender_psid, response) {
     );
 }
 const handleGetStarted = (sender_psid) => {
-    return Promise(async (resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
             response = { text: "Hello!, Welcome to the Kunz's Application" };
             await callSendAPI(sender_psid, response);
