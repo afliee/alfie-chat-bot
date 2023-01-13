@@ -32,7 +32,9 @@ function callSendAPI(sender_psid, response) {
 let handleGetStarted = (sender_psid) => {
     return new Promise(async (resolve, reject) => {
         try {
-            response = { text: "Hello!, Welcome to the Kunz's Application" };
+            let response = {
+                text: "Hello!, Welcome to the Kunz's Application",
+            };
             await callSendAPI(sender_psid, response);
             resolve('done');
         } catch (err) {
