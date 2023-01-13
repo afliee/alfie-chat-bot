@@ -29,7 +29,7 @@ function callSendAPI(sender_psid, response) {
         }
     );
 }
-const handleGetStarted = (sender_psid) => {
+let handleGetStarted = (sender_psid) => {
     return new Promise(async (resolve, reject) => {
         try {
             response = { text: "Hello!, Welcome to the Kunz's Application" };
@@ -41,6 +41,6 @@ const handleGetStarted = (sender_psid) => {
     });
 };
 
-module.export = {
+module.exports = {
     handleGetStarted: handleGetStarted,
 };
