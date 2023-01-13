@@ -33,7 +33,7 @@ const handleGetStarted = (sender_psid) => {
     return Promise(async (resolve, reject) => {
         try {
             response = { text: "Hello!, Welcome to the Kunz's Application" };
-            await this.callSendAPI(sender_psid, response);
+            await callSendAPI(sender_psid, response);
             resolve('done');
         } catch (err) {
             reject(err);
