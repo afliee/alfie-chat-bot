@@ -1,6 +1,8 @@
 require('dotenv').config();
 import request from 'request';
 
+const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
+
 //process.env.NAME_VARIABLES
 let getHomePage = (req, res) => {
     return res.render('homepage.ejs');
@@ -112,7 +114,7 @@ function handleMessage(sender_psid, received_message) {
 
 // Handles messaging_postbacks events
 function handlePostback(sender_psid, received_postback) {
-    console.log("in postback");
+    console.log('in postback');
     let response;
 
     // Get the payload for the postback
@@ -156,8 +158,33 @@ function callSendAPI(sender_psid, response) {
     );
 }
 
+function setupProfile(req, res) {
+    // Construct the message body
+    let request_body = {
+        get_started: 'GET_STARTED',
+        whitelisted_domains: 'https://alfie-chat-bot.onrender.com/',
+    };
+
+    // Send the HTTP request to the Messenger Platform
+    request(
+        {
+            uri: `https://graph.facebook.com/v15.0/me/messenger_profile?access_token=${PAGE_ACCESS_TOKEN}`,
+            qs: { access_token: PAGE_ACCESS_TOKEN },
+            method: 'POST',
+            json: request_body,
+        },
+        (err, res, body) => {
+            if (!err) {
+                console.log('setup profile success!');
+            } else {
+                console.error('Unable to setup:' + err);
+            }
+        }
+    );
+}
 module.exports = {
     getHomePage: getHomePage,
     postWebhook: postWebhook,
     getWebhook: getWebhook,
+    setupProfile: setupProfile,
 };
