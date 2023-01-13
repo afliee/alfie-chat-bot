@@ -103,6 +103,7 @@ function handleMessage(sender_psid, received_message) {
                 },
             },
         };
+        console.log(response);
     }
 
     // Send the response message
