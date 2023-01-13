@@ -1,5 +1,6 @@
 require('dotenv').config();
 import request from 'request';
+import chatService from '../service/chatService';
 
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 
@@ -113,7 +114,7 @@ function handleMessage(sender_psid, received_message) {
 }
 
 // Handles messaging_postbacks events
-function handlePostback(sender_psid, received_postback) {
+async function handlePostback(sender_psid, received_postback) {
     console.log('in postback');
     let response;
 
@@ -121,18 +122,18 @@ function handlePostback(sender_psid, received_postback) {
     let payload = received_postback.payload;
 
     // Set the response based on the postback payload
-    // if (payload === 'yes') {
-    //     response = { text: 'Thanks!' };
-    // } else if (payload === 'no') {
-    //     response = { text: 'Oops, try sending another image.' };
-    // }
     switch (payload) {
         case 'yes':
             response = { text: 'Thanks!' };
+            break;
         case 'no':
             response = { text: 'Oops, try sending another image.' };
+            break;
         case 'GET_STARTED':
-            response = { text: "Hello!, Welcome to the Kunz's Application" };
+            await chatService.handleGetStarted(sender_psid);
+            break;
+        default:
+            response = { text: 'Oops, What did you do?' };
     }
     // Send the message to acknowledge the postback
     callSendAPI(sender_psid, response);
