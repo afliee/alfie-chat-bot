@@ -132,6 +132,9 @@ async function handlePostback(sender_psid, received_postback) {
         case 'GET_STARTED':
             await chatService.handleGetStarted(sender_psid);
             break;
+        case 'SETUP_ACCOUNT':
+            console.log('object');
+            break;
         default:
             response = { text: 'Oops, What did you do?' };
     }
@@ -196,9 +199,52 @@ async function setupProfile(req, res) {
 
     return res.send('setup profile success!');
 }
+async function setupPersistent(req, res) {
+    let request_body = {
+        persistent_menu: [
+            {
+                locale: 'default',
+                composer_input_disabled: false,
+                call_to_actions: [
+                    {
+                        type: 'web_url',
+                        title: 'Visit Owner',
+                        url: 'https://www.facebook.com/kunzz.3108',
+                        webview_height_ratio: 'full',
+                    },
+                    {
+                        type: 'postback',
+                        title: 'Restart Conversation',
+                        payload: 'RESTART_CONVERSATION',
+                    },
+                ],
+            },
+        ],
+    };
+
+    // Send the HTTP request to the Messenger Platform
+    await request(
+        {
+            uri: `https://graph.facebook.com/v15.0/me/messenger_profile?access_token=${PAGE_ACCESS_TOKEN}`,
+            qs: { access_token: PAGE_ACCESS_TOKEN },
+            method: 'POST',
+            json: request_body,
+        },
+        (err, res, body) => {
+            console.log(body);
+            if (!err) {
+                console.log('setup persistent menu success!');
+            } else {
+                console.error('Unable to setup:' + err);
+            }
+        }
+    );
+    return res.send('setup persistent menu success!');
+}
 module.exports = {
     getHomePage: getHomePage,
     postWebhook: postWebhook,
     getWebhook: getWebhook,
     setupProfile: setupProfile,
+    setupPersistent: setupPersistent,
 };
